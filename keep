@@ -1,0 +1,66 @@
+colours
+[#0d865c
+rgb(13,134,92)]-Green on logo
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar" id="topNav" >
+    
+         <img src="Untitled.png" alt="logo" width="30%">
+          
+          <div class="nav-item" >
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li>
+                <a  href="index.html">Home</a>
+              </li>
+              <li>
+                <a  href="recipe.html">Recipes</a>
+              </li>
+              <li>
+                <a  href="saved.html">Recipe Book</a>
+              </li>  
+           
+            </ul>
+            
+          </div>
+          <div class="nav-search">
+              <form class="search" role="search">
+                  <input  type="search" placeholder="Search" >
+                  <button type="submit">Search</button>
+                </form>
+          </div>
+          </div>
+      </nav>
+      <div class="sidebar" id="sidebar">
+        <img src="Untitled.png" alt="logo" width="60%">
+        <div  id="sideItem">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li>
+                <a  href="index.html">Home</a>
+              </li>
+              <li>
+                <a  href="recipe.html">Recipes</a>
+              </li>
+              <li>
+                <a  href="saved.html">Recipe Book</a>
+              </li>  
+           
+            </ul>
+            
+          </div>
+          <form role="search">
+              <input class="search-space" type="search" placeholder="Search" >
+              <button class="search-btn" type="submit">Search</button>
+            </form>
+      </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
