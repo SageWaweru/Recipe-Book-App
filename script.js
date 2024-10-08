@@ -1,177 +1,244 @@
-const API_KEY = " 9d25b92e69c240448651d9e7181ab286";
+function handleclick() {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
+}
+
+const API_URL = "https://www.themealdb.com/api/json/v1/1/filter.php?i=";
 const numberOfRecipes = 4;
-const allIngredients = ["apples", "flour", "sugar","spaghetti", "butter", "milk", "eggs", "chicken", "cheese", "tomatoes", "potatoes", "onions", "garlic"];
-const getRandomIngredients = (numIngredients= 4) => {
-    const shuffled = allIngredients.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, numIngredients).join(",+"); 
+const allIngredients = ["spaghetti", "chicken"];
+
+const getRandomIngredients = (numIngredients = 1) => {
+  const shuffled = allIngredients.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, numIngredients).join(",");
 };
 
 const displayRecipes = (recipes) => {
-    const recipeContainer = document.getElementById('recipeList');
-    
-    recipeContainer.innerHTML = '';
-    
-    recipes.forEach(recipe => {
-        const recipeCard = document.createElement('div');
-        recipeCard.classList.add('recipe-card');
-        
-        recipeCard.innerHTML = `
-            <img src="${recipe.image}" alt="${recipe.title}">
-            <h3>${recipe.title}</h3>
-            <p><strong>Ingredients:</strong> ${recipe.usedIngredients.map(ing => ing.name).join(', ')}</p>
-            <p><strong>Missing Ingredients:</strong> ${recipe.missedIngredients.map(ing => ing.name).join(', ')}</p>
-            <button class="preview-btn" onclick="viewRecipe(${recipe.id})">View Recipe</button>
+  const recipeContainer = document.getElementById("recipeList");
+  recipeContainer.innerHTML = "";
 
+  recipes.forEach((recipe) => {
+    const recipeCard = document.createElement("div");
+    recipeCard.classList.add("recipe-card");
+
+    recipeCard.innerHTML = `
+            <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" aria-label="Recipe image of ${recipe.strMeal}">
+            <h3>${recipe.strMeal}</h3>
+            <button class="preview-btn" onclick="viewRecipe('${recipe.idMeal}')" aria-label="Preview recipe: ${recipe.strMeal}">View Recipe</button>
         `;
-        
-        recipeContainer.appendChild(recipeCard);
-    });
+
+    recipeContainer.appendChild(recipeCard);
+  });
 };
 
 const fetchData = () => {
-    const ingredients = getRandomIngredients(); 
-    console.log(`Fetching recipes for ingredients: ${ingredients}`);
-    
-    fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredients}&number=${numberOfRecipes}&apiKey=${API_KEY}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response not ok");
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayRecipes(data);  
-        })
-        .catch(error => {
-            console.error("There is a problem fetching data", error);
-        });
+  const ingredients = getRandomIngredients();
+  console.log(`Fetching recipes for ingredients: ${ingredients}`);
+
+  fetch(`${API_URL}${ingredients}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.meals) {
+        displayRecipes(data.meals);
+      } else {
+        console.error("No recipes found for the ingredients");
+        document.getElementById("recipeList").innerHTML =
+          "<p>No recipes found.</p>";
+      }
+    })
+    .catch((error) => {
+      console.error("There is a problem fetching data", error);
+    });
 };
+
 fetchData();
 
-const recipeNumber = 10;
-const ingredientList = ["apples", "flour", "sugar","spaghetti", "butter", "milk", "eggs", "chicken", "cheese", "tomatoes", "potatoes", "onions", "garlic"];
-const getingredients = (ingredientNumber= 3) => {
-    const shuffled = allIngredients.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, ingredientNumber).join(",+"); 
+function viewRecipe(idMeal) {
+  sessionStorage.setItem("recipeId", idMeal);
+  window.location.href = "fullview.html";
+}
+
+function loadRecipeDetails() {
+  const recipeId = sessionStorage.getItem("recipeId");
+  fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const recipe = data.meals[0];
+      document.getElementById("recipeContainer").innerHTML = `
+                
+                <div>
+                  <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}">
+                    <p><strong>Category:</strong> ${recipe.strCategory}</p>
+                </div>
+                <h2>${recipe.strMeal}</h2>
+                <div>
+                    <h4><strong>Instructions: </strong> <br>${recipe.strInstructions}</h4>
+                </div>
+                <div class="v-btn">
+                <button id="watchBtn" href="${recipe.strYoutube}" target="_blank">Watch Recipe Video</a></button>
+                <button id="saveBtn" onclick="saveRecipe(${recipe.idMeal})"aria-label="Save recipe: ${recipe.strMeal}">Save Recipe</button>
+                </div>
+
+            `;
+    })
+    .catch((error) => console.error("Error fetching recipe details:", error));
+}
+loadRecipeDetails();
+
+const ingredients = [
+  "apples",
+  "flour",
+  "sugar",
+  "spaghetti",
+  "butter",
+  "milk",
+  "eggs",
+  "chicken",
+  "cheese",
+  "tomatoes",
+  "potatoes",
+  "onions",
+  "garlic",
+];
+
+const getIngredients = (number = 1) => {
+  const random = ingredients.sort(() => 0.5 - Math.random());
+  return random.slice(0, number).join(",");
 };
 
-const recipePreview = (recipes) => {
-    const container = document.getElementById('recipeContainer');
-    
-    container.innerHTML = '';
-    
-    recipes.forEach(recipe => {
-        const recipeCard = document.createElement('div');
-        recipeCard.classList.add('recipe-preview');
-        
-        recipeCard.innerHTML = `
-            <div><img src="${recipe.image}" alt="${recipe.title}"></div>
-            <div>
-                <h3>${recipe.title}</h3>
-            </div>
-            <div>
-                <p><strong>Ingredients:</strong> ${recipe.usedIngredients.map(ing => ing.name).join(', ')}</p>
-            </div>
-            <div>
-                <p><strong>Missing Ingredients:</strong> ${recipe.missedIngredients.map(ing => ing.name).join(', ')}</p>
-            </div>
-            <div><button class="r-btn" onclick="viewRecipe(${recipe.id})">View Recipe</button></div>
-            <div><button class="save-btn" onclick="saveRecipe(${recipe.id})">Save Recipe</button></div>
+const showRecipes = (recipes) => {
+  const container = document.getElementById("RecipeContainer");
+  container.innerHTML = "";
 
+  recipes.forEach((recipe) => {
+    const Card = document.createElement("div");
+    Card.classList.add("card");
+
+    Card.innerHTML = `
+            <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" aria-label="Recipe image of ${recipe.strMeal}">
+            <h3>${recipe.strMeal}</h3>
+            <button class="preview-btn" onclick="viewRecipe('${recipe.idMeal}')" aria-label="Preview recipe: ${recipe.strMeal}">View Recipe</button>
         `;
-        
-        container.appendChild(recipeCard);
-    });
+
+    container.appendChild(Card);
+  });
 };
 
 const getData = () => {
-    const Ingredients = getingredients(); 
-    console.log(`Fetching recipes for ingredients: ${Ingredients}`);
-    
-    fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${Ingredients}&number=${recipeNumber}&apiKey=${API_KEY}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response not ok");
-            }
-            return response.json();
-        })
-        .then(data => {
-            recipePreview(data);  
-        })
-        .catch(error => {
-            console.error("There is a problem fetching data", error);
-        });
+  i = getIngredients();
+
+  fetch(`${API_URL}${i}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.meals) {
+        showRecipes(data.meals);
+      } else {
+        console.error("No recipes found for the ingredients");
+        document.getElementById("RecipeContainer").innerHTML =
+          "<p>No recipes found.</p>";
+      }
+    })
+    .catch((error) => {
+      console.error("There is a problem fetching data", error);
+    });
 };
 getData();
 
-function viewRecipe(id) {
-        sessionStorage.setItem('recipeId', id);
-        window.location.href = 'recipe.html';
-    }
-function saveRecipe(id) {
-    fetch(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)
-        .then(response => response.json())
-        .then(recipe => {
-            let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+function saveRecipe(idMeal) {
+  fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("API Response Data:", data);
 
-            const recipeExists = savedRecipes.some(savedRecipe => savedRecipe.id === recipe.id);
-            if (!recipeExists) {
-                savedRecipes.push(recipe);
-
-                localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
-
-                alert(`${recipe.title} has been saved!`);
-            } else {
-                alert(`${recipe.title} is already saved.`);
-            }
-        })
-        .catch(error => console.error("Error saving recipe:", error));
-}
-
-function loadSavedRecipes() {
-    const savedRecipesContainer = document.getElementById('savedRecipesContainer');
-    
-    const savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
-
-    if (savedRecipes.length === 0) {
-        savedRecipesContainer.innerHTML = '<p>No saved recipes yet.</p>';
+      if (!data.meals || data.meals.length === 0) {
+        alert("Recipe not found.");
+        console.error("Recipe not found.");
         return;
-    }
+      }
 
-    savedRecipesContainer.innerHTML = ''; 
+      const recipe = data.meals[0];
+      console.log("Recipe fetched:", recipe);
 
-    savedRecipes.forEach(recipe => {
-        const recipeCard = document.createElement('div');
-        recipeCard.classList.add('saved-recipe');
-        
-        recipeCard.innerHTML = `
-            <div><img src="${recipe.image}" alt="${recipe.title}"></div>
-            <div>
-                <h3>${recipe.title}</h3>
-            </div>
-            <div>
-                <p><strong>Ingredients:</strong> ${recipe.extendedIngredients.map(ing => ing.name).join(', ')}</p>
-            </div >
-             <div class="save-btns">
-             <button class="remove-btn" onclick="removeRecipe(${recipe.id})">Remove</button>
-             <button  id="s-preview"onclick="viewRecipe(${recipe.id})">View Recipe</button>
-             </div>
+      let savedRecipes = JSON.parse(localStorage.getItem("savedRecipes")) || [];
 
-        `;
-        
-        savedRecipesContainer.appendChild(recipeCard);
+      const recipeExists = savedRecipes.some(
+        (savedRecipe) => savedRecipe.idMeal === recipe.idMeal
+      );
+      console.log("Recipe exists in saved list?", recipeExists); // Debugging log
+
+      if (!recipeExists) {
+        savedRecipes.push(recipe);
+
+        localStorage.setItem("savedRecipes", JSON.stringify(savedRecipes));
+
+        alert(`${recipe.strMeal} has been saved!`);
+      } else {
+        alert(`${recipe.strMeal} is already saved.`);
+      }
+    })
+    .catch((error) => {
+      console.error("Error saving recipe:", error);
+      alert("An error occurred while saving the recipe.");
     });
 }
 
-function removeRecipe(id) {
-    let savedRecipes = JSON.parse(localStorage.getItem('savedRecipes')) || [];
+function displaySavedRecipes() {
+  const savedRecipes = JSON.parse(localStorage.getItem("savedRecipes")) || [];
+  const savedRecipesContainer = document.getElementById(
+    "savedRecipesContainer"
+  );
 
-    savedRecipes = savedRecipes.filter(recipe => recipe.id !== id);
+  savedRecipesContainer.innerHTML = "";
+  if (savedRecipes.length === 0) {
+    savedRecipesContainer.innerHTML = "<p>No saved recipes yet.</p>";
+    return;
+  }
 
-    localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
+  savedRecipes.forEach((recipe) => {
+    const recipeCard = document.createElement("div");
+    recipeCard.classList.add("saved-recipe");
 
-    loadSavedRecipes();
+    recipeCard.innerHTML = `
+            <div>
+                <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" aria-label="Recipe image of ${recipe.strMeal}">
+            </div>
+            <div>
+                <h3>${recipe.strMeal}</h3>
+            </div>
+            <div>
+                <p><strong>Category:</strong> ${recipe.strCategory}</p>
+            </div>
+            <div class="save-btns">
+                <button class="remove-btn" onclick="removeSavedRecipe('${recipe.idMeal}')" aria-label="Remove recipe: ${recipe.strMeal}">Remove</button>
+                <button onclick="viewRecipe('${recipe.idMeal}')" aria-label="View recipe: ${recipe.strMeal}">View Recipe</button>
+            </div>
+        `;
+
+    savedRecipesContainer.appendChild(recipeCard);
+  });
 }
 
-loadSavedRecipes();
+displaySavedRecipes();
+function removeSavedRecipe(idMeal) {
+  let savedRecipes = JSON.parse(localStorage.getItem("savedRecipes")) || [];
 
+  savedRecipes = savedRecipes.filter((recipe) => recipe.idMeal !== idMeal);
+
+  localStorage.setItem("savedRecipes", JSON.stringify(savedRecipes));
+
+  displaySavedRecipes();
+}

@@ -107,10 +107,42 @@ display: flex;
 
 }
 
+#recipeContainer{
+    background-color:rgb(13,134,92);
+    margin: 2rem;
+    color: bisque;
+    border-radius: 1rem;
+    box-shadow: 0 4px 5px rgba(8, 76, 52, 0.3);  
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    
+   
+}
+#recipeContainer h2{
+    color: bisque;
+    text-align: start;
+    margin-left: 2rem;
+}
+#recipeContainer div{
+    margin: 1rem;
+  margin-left: 2rem;
+}
 .search-space{
     width: 10rem;
     margin-left: 1rem;
     margin-bottom: 2rem;
+}
+
+#recipeContainer img{
+  border-radius: 20rem;
+  width: 10vw;
+ /* margin-left: 2rem; */
+}
+
+#view-head{
+    display: flex;
+    flex-direction: row;
 }
 
 .search-btn{
@@ -141,27 +173,38 @@ h1, h2 {
 }
 
 /* Recipie page styling */
-.recipe-preview{
+#RecipeContainer{
     display: flex;
-    flex-direction: row;
-    box-shadow: 0 4px 5px rgba(8, 76, 52, 0.3);  
+    flex-direction:column;
+    align-items: center;
     margin-top: 2rem;
 }
-
-.recipe-preview div{
-    margin-left: 1rem;
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 5px rgba(8, 76, 52, 0.3); 
+    width: 60vw; 
+    border-radius: 1rem;
+    margin: 2rem;
 }
+
+.card button{
+    margin-bottom: 1rem;
+}
+
 @media(max-width: 700px){
-    .recipe-preview{
+    #RecipeContainer{
         flex-direction: column;
     }
 
-    .recipe-preview div{
+    #RecipeContainer div{
         margin-left: 2rem;
     }
 }
-.recipe-preview img {
-    width:20vw;
+#RecipeContainer img {
+    width:50vw;
+    height: 70vh;
     border-radius: 0.6rem;
     margin: 1rem;
 }
@@ -171,10 +214,13 @@ h1, h2 {
     height: 2rem;
     margin: 1rem;
 }
-
-.save-btn{
+.v-btn{
     display: flex;
-    width: 6rem;
+}
+#saveBtn,
+#watchBtn{
+
+    width: 8rem;
     height: 2rem;
     margin: 1rem;
 }
@@ -203,3 +249,41 @@ h1, h2 {
   
 }
 
+#hamburgerMenu{
+background-color: rgba(248, 248, 248, 0.502);
+display: none;
+}
+
+#hamburgerMenu img{
+    width: 4vw;
+    float: right;
+    margin: 1rem;
+}
+
+@media(max-width:855px){
+    .navbar{
+        display: none;
+    }
+
+    #hamburgerMenu{
+        display: block;
+    }
+
+}
+
+@media(max-width:310px){
+    .search-space{
+        width: 5rem;
+        margin-left:.8rem;
+        height: 1.2rem;
+    }
+    
+    .search-btn{
+        width: 2.3rem;
+       font-size: .5rem;
+       margin: 0;
+       height: 1rem;
+    }
+   
+
+}

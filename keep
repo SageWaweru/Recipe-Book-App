@@ -64,3 +64,4 @@ rgb(13,134,92)]-Green on logo
     <script src="script.js"></script>
 </body>
 </html>
+https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredients}&number=${numberOfRecipes}&apiKey=${API_KEY}
