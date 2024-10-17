@@ -216,11 +216,8 @@ function displaySavedRecipes() {
             <div>
                 <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" aria-label="Recipe image of ${recipe.strMeal}">
             </div>
-            <div>
+            <div id="tittle">
                 <h3>${recipe.strMeal}</h3>
-            </div>
-            <div>
-                <p><strong>Category:</strong> ${recipe.strCategory}</p>
             </div>
             <div class="save-btns">
                 <button class="remove-btn" onclick="removeSavedRecipe('${recipe.idMeal}')" aria-label="Remove recipe: ${recipe.strMeal}">Remove</button>
