@@ -106,7 +106,11 @@ display: flex;
  font-size: 2rem;
 
 }
-
+#fullview{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 #recipeContainer{
     background-color:rgb(13,134,92);
     margin: 2rem;
@@ -116,7 +120,7 @@ display: flex;
     display: flex;
     flex-direction: column;
     width: 50vw;
-    
+    align-items: center;
    
 }
 #recipeContainer h2{
@@ -173,33 +177,48 @@ h1, h2 {
 }
 
 /* Recipie page styling */
-#RecipeContainer{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    margin-top: 2rem;
-}
-.card{
+ #RecipeContainer{
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    /* box-shadow: 0 4px 5px rgba(8, 76, 52, 0.3);  */
+ } 
+ .card{
     display: flex;
     flex-direction: column;
     align-items: center;
     box-shadow: 0 4px 5px rgba(8, 76, 52, 0.3); 
-    width: 60vw; 
+    width: 23vw; 
     border-radius: 1rem;
     margin: 2rem;
 }
 
 .card button{
     margin-bottom: 1rem;
-}
+} 
 
-@media(max-width: 700px){
+#RecipeContainer .card img{
+    width: 20vw;
+}
+@media(max-width: 685px){
     #RecipeContainer{
+        display: flex;
         flex-direction: column;
     }
-
-    #RecipeContainer div{
-        margin-left: 2rem;
+    .card{
+        width: 80vw; 
+        margin: 2rem;
+    }
+    #RecipeContainer .card img{
+        width: 60vw;
+        border-radius: 50%;
+    }
+}
+@media(max-width: 325px){
+ 
+    #RecipeContainer .card img{
+        width: 60vw;
+        height: 40vh;
+        border-radius: 50%;
     }
 }
 #RecipeContainer img {

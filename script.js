@@ -119,8 +119,12 @@ const showRecipes = (recipes) => {
     Card.classList.add("card");
 
     Card.innerHTML = `
+            <div>
             <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" aria-label="Recipe image of ${recipe.strMeal}">
+            </div>
+            <div>
             <h3>${recipe.strMeal}</h3>
+            </div>
             <button class="preview-btn" onclick="viewRecipe('${recipe.idMeal}')" aria-label="Preview recipe: ${recipe.strMeal}">View Recipe</button>
         `;
 
