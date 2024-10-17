@@ -62,6 +62,37 @@ function viewRecipe(idMeal) {
   window.location.href = "fullview.html";
 }
 
+function handleSearch() {
+  event.preventDefault();
+
+  const searchQuery = document.querySelector(".search-space").value;
+
+  if (!searchQuery) {
+    alert("Please enter an ingredient to search.");
+    return;
+  }
+
+  fetch(`${API_URL}${searchQuery}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.meals) {
+        displayRecipes(data.meals);
+      } else {
+        console.error("No recipes found for the ingredients");
+        document.getElementById("recipeList").innerHTML =
+          "<p>No recipes found.</p>";
+      }
+    })
+    .catch((error) => {
+      console.error("There is a problem fetching data", error);
+    });
+}
+
 function loadRecipeDetails() {
   const recipeId = sessionStorage.getItem("recipeId");
   fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`)
