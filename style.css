@@ -226,14 +226,22 @@ h1, h2 {
 }
 
 /* saved page styling */
+#savedRecipesContainer{
+display: grid;
+grid-template-columns: 30% 30% 30%;
+gap: 2rem;
+
+}
+
 .saved-recipe{
-    margin: 2rem;
+    margin: 1rem;
     border-radius: 0.6rem;
     box-shadow: 0 4px 5px rgba(8, 76, 52, 0.3);
+    width: 100%;
 }
 
 .saved-recipe img{
-    width: 30vw;
+    width: 25vw;
     border-radius: 0.6rem;
     margin-top: 1rem;
 }
